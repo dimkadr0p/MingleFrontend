@@ -1,51 +1,45 @@
 import React from 'react';
-import logo from './logo.svg';
 import LoginForm from './Components/LoginForm'
 import RegisterForm from './Components/RegisterForm'
 import PasswordRecoveryForm from './Components/PasswordRecoveryForm'
-import WelcomeHome from './Components/WelcomeHome'
-import { Routes, Route } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+import WelcomeAuth from './Components/WelcomeAuth'
+import AuthorizedPage from './Components/AuthorizedPage'
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { useAuth } from './Components/AuthProvider';
 
 
 function App() {
+  const { isAuthenticated } = useAuth();
 
-  const location = useLocation();
-
-  let pageTitle;
-
-  switch (location.pathname) {
-    case '/register':
-      pageTitle = 'Зарегистрироваться в Mingle';
-      break;
-    case '/forgot-password':
-      pageTitle = 'Восстановление пароля в Mingle';
-      break;
-    case '/login':
-      pageTitle = 'Войти в Mingle';
-    default:
-      pageTitle = 'Добро пожаловать в Mingle';
-      break;
-  }
-  
   return (
     <div className="App">
-
-      <div className='auth d-flex flex-column justify-content-center align-items-center' style={{ height: '75vh' }}>
-        <img style={{ paddingLeft: "75px" }} src={logo} alt="Logo" width="500px" height="300px" />
-        <h2 style={{ marginBottom: "20px" }} className="font-weight-bold">{pageTitle}</h2>
-
-        <Routes>
-          <Route exact path='/' element={<WelcomeHome/>}/>
-          <Route exact path='/login' element={<LoginForm />} />
-          <Route exact path='/register' element={<RegisterForm />} />
-          <Route exact path='/forgot-password' element={<PasswordRecoveryForm />} />
-        </Routes>
-
-      </div>
-
+      <Routes>
+        <Route
+          path='/'
+          element={isAuthenticated ? <AuthorizedPage /> : <WelcomeAuth />}
+        />
+        <Route
+          path='/authorized'
+          element={isAuthenticated ? <AuthorizedPage /> : <LoginForm />}
+        />
+        <Route
+          path='/login'
+          element={
+            isAuthenticated ? <Navigate to="/authorized" replace /> : <LoginForm />
+          }
+        />
+        <Route
+          path='/register'
+          element={
+            isAuthenticated ? <Navigate to="/authorized" replace /> : <RegisterForm />
+          }
+        />
+        <Route
+          path='/forgot-password'
+          element={<PasswordRecoveryForm />}
+        />
+      </Routes>
     </div>
   );
 }
-
 export default App;

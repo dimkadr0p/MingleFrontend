@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import BootButton from './UI/BootButton';
 import { useNavigate } from 'react-router-dom';
+import AuthWrapper from './AuthWrapper';
+
 
 
 function RegisterForm() {
@@ -26,7 +28,7 @@ function RegisterForm() {
 
         if (password !== passwordConfirmation) {
             setPasswordMatchError('Пароли не совпадают');
-            return; 
+            return;
         }
 
         try {
@@ -76,37 +78,40 @@ function RegisterForm() {
     };
 
     return (
-        <Form className="w-25" onSubmit={handleRegister}>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Логин</Form.Label>
-                <Form.Control type="text" minLength={5} maxLength={20} value={name} onChange={(e) => setName(e.target.value)} placeholder="Введите логин" />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Email адрес</Form.Label>
-                <Form.Control type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Введите email" />
-                <Form.Text className="text-muted">
-                    Мы никогда не передадим вашу электронную почту кому-либо еще.
-                </Form.Text>
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-                <Form.Label>Пароль</Form.Label>
-                <Form.Control type="password" minLength={8} placeholder="Введите пароль" onChange={(e) => setPassword(e.target.value)} />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicPasswordConfirmation">
-                <Form.Label>Подтвердите пароль</Form.Label>
-                <Form.Control type="password" minLength={8} placeholder="Введите повторно пароль" onChange={(e) => setPasswordConfirmation(e.target.value)} />
-                {passwordMatchError && <Form.Text className="text-danger">{passwordMatchError}</Form.Text>}
-            </Form.Group>
-            {errorMessage && <Form.Text className="text-danger">{errorMessage}</Form.Text>}
-            <Form.Group className="mb-3">
-                <Form.Text>
-                    Уже есть аккаунт? <Link to="/login" className="text-decoration-none text-primary">Войти</Link>
-                </Form.Text>
-            </Form.Group>
-            {loading
-                ? <BootButton />
-                : <Button variant="primary" type="submit">Зарегистрироваться</Button>}
-        </Form>
+
+        <AuthWrapper pageTitle={"Зарегистрироваться в Mingle"}>
+            <Form className="w-25" onSubmit={handleRegister}>
+                <Form.Group className="mb-3" controlId="formBasicEmail">
+                    <Form.Label>Логин</Form.Label>
+                    <Form.Control type="text" minLength={5} maxLength={20} value={name} onChange={(e) => setName(e.target.value)} placeholder="Введите логин" />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicEmail">
+                    <Form.Label>Email адрес</Form.Label>
+                    <Form.Control type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Введите email" />
+                    <Form.Text className="text-muted">
+                        Мы никогда не передадим вашу электронную почту кому-либо еще.
+                    </Form.Text>
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicPassword">
+                    <Form.Label>Пароль</Form.Label>
+                    <Form.Control type="password" minLength={8} placeholder="Введите пароль" onChange={(e) => setPassword(e.target.value)} />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicPasswordConfirmation">
+                    <Form.Label>Подтвердите пароль</Form.Label>
+                    <Form.Control type="password" minLength={8} placeholder="Введите повторно пароль" onChange={(e) => setPasswordConfirmation(e.target.value)} />
+                    {passwordMatchError && <Form.Text className="text-danger">{passwordMatchError}</Form.Text>}
+                </Form.Group>
+                {errorMessage && <Form.Text className="text-danger">{errorMessage}</Form.Text>}
+                <Form.Group className="mb-3">
+                    <Form.Text>
+                        Уже есть аккаунт? <Link to="/login" className="text-decoration-none text-primary">Войти</Link>
+                    </Form.Text>
+                </Form.Group>
+                {loading
+                    ? <BootButton />
+                    : <Button variant="primary" type="submit">Зарегистрироваться</Button>}
+            </Form>
+        </AuthWrapper>
     );
 }
 

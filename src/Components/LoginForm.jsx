@@ -5,6 +5,10 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import axios from 'axios';
 import BootButton from './UI/BootButton';
+import { useNavigate } from 'react-router-dom';
+import AuthWrapper from './AuthWrapper';
+
+
 
 function LoginForm() {
 
@@ -13,7 +17,8 @@ function LoginForm() {
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
-
+    const navigate = useNavigate();
+  
     const handleLogin = async (e) => {
         e.preventDefault();
 
@@ -25,6 +30,9 @@ function LoginForm() {
                 setErrorMessage("");
                 const { token } = response.data;
                 localStorage.setItem('token', token);
+                navigate('/authorized');
+                window.location.reload();
+                //TODO:Разобраться почему не выкидыввает на /authorized, в проивном случае перезагрузить страницу
             }
 
         } catch (error) {
@@ -62,31 +70,34 @@ function LoginForm() {
     };
 
     return (
-        <Form className="w-25" onSubmit={handleLogin}>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Логин</Form.Label>
-                <Form.Control type="text" minLength={5} maxLength={20} value={name} onChange={(e) => setName(e.target.value)} placeholder="Введите логин" />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-                <Form.Label>Пароль</Form.Label>
-                <Form.Control type="password" minLength={8} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Введите пароль" />
-                <Form.Text>
-                    <Link to="/forgot-password" className="text-decoration-none text-primary">Забыли пароль?</Link>
-                </Form.Text>
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                <Form.Text style={{ color: 'red' }}>
-                    {errorMessage}
-                </Form.Text>
-                <Form.Check type="checkbox" label="Запомнить меня" />
-            </Form.Group>
-            <Form.Group className="mb-3">
-                <Form.Text>
-                    Еще не зарегистрированы? <Link to="/register" className="text-decoration-none text-primary">Зарегистрироваться</Link>
-                </Form.Text>
-            </Form.Group>
-            {loading ? <BootButton /> : <Button variant="primary" type="submit">Войти</Button>}
-        </Form>
+
+        <AuthWrapper pageTitle={"Войти в Mingle"}>
+            <Form className="w-25" onSubmit={handleLogin}>
+                <Form.Group className="mb-3" controlId="formBasicEmail">
+                    <Form.Label>Логин</Form.Label>
+                    <Form.Control type="text" minLength={5} maxLength={20} value={name} onChange={(e) => setName(e.target.value)} placeholder="Введите логин" />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicPassword">
+                    <Form.Label>Пароль</Form.Label>
+                    <Form.Control type="password" minLength={8} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Введите пароль" />
+                    <Form.Text>
+                        <Link to="/forgot-password" className="text-decoration-none text-primary">Забыли пароль?</Link>
+                    </Form.Text>
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicCheckbox">
+                    <Form.Text style={{ color: 'red' }}>
+                        {errorMessage}
+                    </Form.Text>
+                    <Form.Check type="checkbox" label="Запомнить меня" />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Text>
+                        Еще не зарегистрированы? <Link to="/register" className="text-decoration-none text-primary">Зарегистрироваться</Link>
+                    </Form.Text>
+                </Form.Group>
+                {loading ? <BootButton /> : <Button variant="primary" type="submit">Войти</Button>}
+            </Form>
+        </AuthWrapper>
     );
 }
 

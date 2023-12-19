@@ -6,7 +6,7 @@ import axios from 'axios';
 const AuthContext = createContext();
 
 
-const CHECK_TOKEN_URL = 'http://localhost:8080/api/info';
+const CHECK_TOKEN_URL = 'http://localhost:8080/api/user/info';
 
 function AuthProvider({ children }) {
     const [isAuthenticated, setIsAuthenticated] = useState(false);

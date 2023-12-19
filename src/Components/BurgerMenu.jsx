@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ProfileCenteredModal from './ProfileCenteredModal';
 import ContactsCenteredModal from './ContactsCenteredModal';
-
+import AddContact from './AddContact';
 
 
 function BurgerMenu() {
     const [modalShowProfile, setModalShowProfile] = useState(false);
     const [modalShowContact, setModalShowContact] = useState(false);
+    const [modalShowAddContact, setModalShowAddContact] = useState(false);
+
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef();
 
@@ -42,7 +44,6 @@ function BurgerMenu() {
                             <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                         </svg>
                         <button onClick={() => setModalShowProfile(true)} className="block ml-4">Профиль</button>
-
                     </div>
 
                     <div className='flex mb-4 hover:bg-slate-300 rounded-md'>
@@ -53,6 +54,17 @@ function BurgerMenu() {
 
 
                         <button onClick={() => setModalShowContact(true)} className="block ml-4">Контакты</button>
+                    </div>
+
+
+                    <div className='flex mb-4 hover:bg-slate-300 rounded-md'>
+
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" dataSlot="icon" className="w-6 h-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+                        </svg>
+
+
+                        <button onClick={() => setModalShowAddContact(true)} className="block ml-4">Добавить контакт</button>
                     </div>
 
                     <div className='flex mb-4 hover:bg-slate-300 rounded-md'>
@@ -83,6 +95,12 @@ function BurgerMenu() {
                 show={modalShowContact}
                 onHide={() => setModalShowContact(false)}
             />
+
+            <AddContact
+                 show={modalShowAddContact}
+                 onHide={() => setModalShowAddContact(false)}
+            />
+            
 
         </div>
     );

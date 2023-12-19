@@ -9,7 +9,6 @@ import FriendsWrapper from './FriendsWrapper';
 function ContactsCenteredModal(props) {
     const [friends, setFriends] = useState([]);
 
-    const data = [];
 
     useEffect(() => {
         const handleContacts = async () => {
@@ -22,7 +21,7 @@ function ContactsCenteredModal(props) {
                 };
                 const response = await axios.get('http://localhost:8080/api/friends', config);
                 if (response.status === 200) {
-                    setFriends(response.data); 
+                    setFriends(response.data);
                 }
 
             } catch (error) {
@@ -43,15 +42,9 @@ function ContactsCenteredModal(props) {
             centered
         >
             <Modal.Header closeButton>
-                <div className='flex items-center gap-6'>
-
-                    <Modal.Title id="contained-modal-title-vcenter">
-                        Контакты
-                    </Modal.Title>
-                    <Button variant="outline-success">Добавить</Button>
-                </div>
-
-
+                <Modal.Title id="contained-modal-title-vcenter">
+                    Контакты
+                </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 {friends.length > 0 ? (

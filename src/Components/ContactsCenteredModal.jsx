@@ -10,6 +10,7 @@ function ContactsCenteredModal(props) {
     const [friends, setFriends] = useState([]);
 
 
+
     useEffect(() => {
         const handleContacts = async () => {
             try {
@@ -33,6 +34,20 @@ function ContactsCenteredModal(props) {
     }, []);
 
 
+    const handleDeleteFriend = async (friend) => {
+        try {
+            const token = localStorage.getItem('token');
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
+            await axios.post(`http://localhost:8080/api/delFriend?name=${friend.name}`, null, config);
+            setFriends(friends.filter((f) => f.id !== friend.id));
+        } catch (error) {
+            console.log("error ", error);
+        }
+    };
 
     return (
         <Modal
@@ -50,7 +65,10 @@ function ContactsCenteredModal(props) {
                 {friends.length > 0 ? (
                     friends.map((friend) => (
                         <div key={friend.id}>
-                            <FriendsWrapper friend={friend} />
+                            <FriendsWrapper
+                                friend={friend}
+                                onDelete={() => handleDeleteFriend(friend)}
+                            />
                         </div>
                     ))
                 ) : (

@@ -10,12 +10,13 @@ const CHECK_TOKEN_URL = 'http://localhost:8080/api/user/info';
 
 function AuthProvider({ children }) {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-
+    const [isLoading, setIsLoading] = useState(true); 
 
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (!token) {
             setIsAuthenticated(false);
+            setIsLoading(false);
             return;
         }
 
@@ -24,9 +25,11 @@ function AuthProvider({ children }) {
         })
             .then(response => {
                 setIsAuthenticated(true);
+                setIsLoading(false);
             })
             .catch(error => {
                 setIsAuthenticated(false);
+                setIsLoading(false);
                 console.error('Ошибка при проверке токена:', error);
             });
 
@@ -34,7 +37,7 @@ function AuthProvider({ children }) {
 
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated }}>
+        <AuthContext.Provider value={{ isAuthenticated, isLoading }}>
             {children}
         </AuthContext.Provider>
     );

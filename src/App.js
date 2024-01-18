@@ -6,10 +6,20 @@ import WelcomeAuth from './Components/WelcomeAuth'
 import AuthorizedPage from './Components/AuthorizedPage'
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './Components/AuthProvider';
-
+import Spinner from 'react-bootstrap/Spinner';
 
 function App() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center vh-100">
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      </div>
+    );
+  }
 
   return (
     <div className="App">

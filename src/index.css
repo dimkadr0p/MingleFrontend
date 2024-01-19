@@ -15,3 +15,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.dialog-container {
+  overflow-y: auto;
+}
+
+button svg:hover path {
+  stroke: #FF0000; 
+}

@@ -4,6 +4,7 @@ import axios from 'axios';
 import PhotoUser from './PhotoUser';
 import { Modal, Button } from 'react-bootstrap';
 import StatusUser from "./StatusUser";
+import StatusMessage from "./StatusMessage";
 
 const getLoginFromToken = () => {
     try {
@@ -25,7 +26,7 @@ function Dialogs() {
         fetchDialogs();
         const interval = setInterval(() => {
             fetchDialogs();
-        }, 1000000000);
+        }, 5000);
         return () => {
             clearInterval(interval);
         };
@@ -72,7 +73,6 @@ function Dialogs() {
             await axios.post("http://localhost:8080/api/sendMessage", data, config);
             setMessage("");
             setIsMessageSent(true);
-            // Обновляем список диалогов после отправки сообщения
             fetchDialogs();
         } catch (error) {
             console.error("Ошибка при отправке сообщения:", error);
@@ -101,7 +101,6 @@ function Dialogs() {
                 }
             };
             await axios.post(`http://localhost:8080/api/delConversation?name=${dialogName}`, null, config);
-            // Обновляем список диалогов после удаления
             fetchDialogs();
         } catch (error) {
             console.log("error ", error);
@@ -149,12 +148,13 @@ const Sidebar = ({ dialogs, selectDialog, getUniqueSenders, handleDeleteDialog }
 };
 
 const DialogItem = ({ sender, dialog, selectDialog, handleDeleteDialog }) => {
+    
     const [showModalDelete, setShowModalDelete] = useState(false);
 
     if (sender.name === getLoginFromToken()) {
         return null;
     }
-    const handleDelete = () => { //скорее всего sender
+    const handleDelete = () => { 
         let UserDialogName;
         if (dialog.sender.name !== getLoginFromToken()) {
             UserDialogName = dialog.sender.name;
@@ -210,6 +210,26 @@ const DialogItem = ({ sender, dialog, selectDialog, handleDeleteDialog }) => {
 };
 
 const MainChatArea = ({ selectedDialog, dialogs, sendMessage, message, setMessage, isMessageSent, setIsMessageSent }) => {
+
+
+    const handleDeleteDialog = async (dialogName) => {
+        try {
+            const token = localStorage.getItem('token');
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            };
+            await axios.post(`http://localhost:8080/api/markAsRead?name=${dialogName}`, null, config);
+        } catch (error) {
+            console.log("error ", error);
+        }
+    };
+
+    if(selectedDialog !== null) {
+        handleDeleteDialog(selectedDialog.sender.name);
+    }
+
     return (
         <div className="flex-1">
             {selectedDialog && (
@@ -246,6 +266,8 @@ const MainChatArea = ({ selectedDialog, dialogs, sendMessage, message, setMessag
 
 const ChatMessage = ({ dialog }) => {
 
+    const authUser = getLoginFromToken();
+
     function formatTime(timeStr) {
         const time = new Date(timeStr);
         const options = {
@@ -263,6 +285,7 @@ const ChatMessage = ({ dialog }) => {
             <div className="flex max-w-96 bg-white rounded-lg p-3 gap-2">
                 <p className="text-gray-700">{dialog.content}</p>
                 <p className="text-gray-400">{formatTime(dialog.recordingTime)}</p>
+                {authUser === dialog.sender.name && <StatusMessage isRead={dialog.read}/> }
             </div>
         </div>
     );

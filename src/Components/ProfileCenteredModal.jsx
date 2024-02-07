@@ -34,24 +34,24 @@ function ProfileCenteredModal(props) {
 
 
   const handlePhotoUpload = async (photo) => {
-      try {
-        const reader = new FileReader();
-        reader.readAsDataURL(photo);
-        reader.onloadend = async () => {
-          const base64Data = reader.result.split(",")[1]; 
-          const token = localStorage.getItem('token');
-          const config = {
+    try {
+        const formData = new FormData();
+        formData.append('file', photo);
+
+        const token = localStorage.getItem('token');
+        const config = {
             headers: {
-              Authorization: `Bearer ${token}`
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'multipart/form-data'
             }
-          };
-          const response = await axios.post('http://localhost:8080/api/user/upload',  { photo: base64Data }, config);
-          window.location.reload(); //Разобраться с перезагрузкой страницы
-          console.log('Фотография успешно загружена:', response.data);
         };
-      } catch (error) {
+
+        const response = await axios.post('http://localhost:8080/api/user/upload', formData, config);
+        console.log('Фотография успешно загружена:', response.data);
+        window.location.reload(); // Перезагрузка страницы после успешной загрузки
+    } catch (error) {
         console.log('Ошибка загрузки фотографии:', error);
-      }
+    }
   };
 
   return (

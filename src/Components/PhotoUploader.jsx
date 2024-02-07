@@ -23,3 +23,6 @@ function PhotoUploader({ onPhotoUpload }) {
 }
 
 export default PhotoUploader;
+
+
+

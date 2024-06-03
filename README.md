@@ -1,3 +1,5 @@
+* [backend](https://github.com/dimkadr0p/MingleBackend) - Репозиторий для бэкенд-части проекта.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
